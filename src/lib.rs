@@ -81,8 +81,7 @@ impl Job {
     /// Job::new(s, || println!("I have a complex schedule...") );
     /// ```
     pub fn new<T>(schedule: Schedule, run: T) -> Job
-        where T: 'static,
-              T: FnMut() -> () + Send + Sync
+        where T: FnMut() -> () + Send + Sync + 'static
     {
         Job {
             schedule,
