@@ -65,13 +65,13 @@ pub use cron::Schedule;
 
 
 /// A schedulable `Job`.
-pub struct Job<'a> {
+pub struct Job {
     schedule: Schedule,
-    run: Box<(FnMut() -> ()) + 'a>,
+    run: Box<FnMut() -> () + Send + Sync>,
     last_tick: Option<DateTime<Utc>>,
 }
 
-impl<'a> Job<'a> {
+impl Job {
     /// Create a new job.
     ///
     /// ```rust,ignore
@@ -80,9 +80,9 @@ impl<'a> Job<'a> {
     /// let s: Schedule = "0 15 6,8,10 * Mar,Jun Fri 2017".into().unwrap();
     /// Job::new(s, || println!("I have a complex schedule...") );
     /// ```
-    pub fn new<T>(schedule: Schedule, run: T) -> Job<'a>
-        where T: 'a,
-              T: FnMut() -> ()
+    pub fn new<T>(schedule: Schedule, run: T) -> Job
+        where T: 'static,
+              T: FnMut() -> () + Send + Sync
     {
         Job {
             schedule,
@@ -112,13 +112,13 @@ impl<'a> Job<'a> {
 
 #[derive(Default)]
 /// The JobScheduler contains and executes the scheduled jobs.
-pub struct JobScheduler<'a> {
-    jobs: Vec<Job<'a>>,
+pub struct JobScheduler {
+    jobs: Vec<Job>,
 }
 
-impl<'a> JobScheduler<'a> {
+impl JobScheduler {
     /// Create a new `JobScheduler`.
-    pub fn new() -> JobScheduler<'a> {
+    pub fn new() -> JobScheduler {
         JobScheduler { jobs: Vec::new() }
     }
 
@@ -130,7 +130,7 @@ impl<'a> JobScheduler<'a> {
     ///     println!("I get executed every 10 seconds!");
     /// }));
     /// ```
-    pub fn add(&mut self, job: Job<'a>) {
+    pub fn add(&mut self, job: Job) {
         self.jobs.push(job)
     }
 
