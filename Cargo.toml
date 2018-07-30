@@ -15,5 +15,5 @@ keywords = ["cron", "crontab", "scheduler", "job"]
 categories = ["date-and-time"]
 
 [dependencies]
-cron = "~0.4"
+cron = { git = "https://github.com/jeffreydecker/cron" }
 chrono = "~0.4"
