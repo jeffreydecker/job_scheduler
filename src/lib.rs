@@ -60,7 +60,7 @@ extern crate chrono;
 extern crate cron;
 
 use chrono::DateTime;
-use chrono::Utc;
+use chrono::Local;
 pub use cron::Schedule;
 
 
@@ -68,7 +68,7 @@ pub use cron::Schedule;
 pub struct Job {
     schedule: Schedule,
     run: Box<FnMut() -> () + Send + Sync>,
-    last_tick: Option<DateTime<Utc>>,
+    last_tick: Option<DateTime<Local>>,
 }
 
 impl Job {
@@ -93,7 +93,7 @@ impl Job {
     }
 
     fn tick(&mut self) {
-        let now = Utc::now();
+        let now = Local::now();
         if self.last_tick.is_none() {
             self.last_tick = Some(now);
             return;
