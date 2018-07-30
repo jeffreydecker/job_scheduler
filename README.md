@@ -1,5 +1,6 @@
 # JobScheduler
 [![](https://docs.rs/job_scheduler/badge.svg)](https://docs.rs/job_scheduler)
+
 Forked from [lholden/job_scheduler](https://github.com/lholden/job_scheduler) to allow for use with rust stable by way of [my cron fork](https://github.com/jeffreydecker/cron) ;)
 
 A simple cron-like job scheduling library for Rust.
